@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifrado César</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cifrado César</h1>
+        <label for="cipherInput">Texto cifrado:</label>
+        <input type="text" id="cipherInput">
+        <button onclick="decrypt()">Descifrar</button>
+        <label for="decryptedOutput">Texto descifrado:</label>
+        <textarea id="decryptedOutput" readonly></textarea>
+    </div>
+
+    <script>
+        function decrypt() {
+            var cipherText = document.getElementById('cipherInput').value;
+            var decryptedText = '';
+
+            for (var shift = 0; shift <= 26; shift++) {
+                var decryptedTextForShift = '';
+                for (var i = 0; i < cipherText.length; i++) {
+                    var charCode = cipherText.charCodeAt(i);
+                    var decryptedCharCode;
+
+                    // Manejar letras mayúsculas
+                    if (charCode >= 65 && charCode <= 90) {
+                        decryptedCharCode = ((charCode - 65 - shift + 26) % 26) + 65;
+                    } 
+                    // Manejar letras minúsculas
+                    else if (charCode >= 97 && charCode <= 122) {
+                        decryptedCharCode = ((charCode - 97 - shift + 26) % 26) + 97;
+                    } 
+                    // Manejar la letra "Ñ" (mayúscula)
+                    else if (charCode === 209) { // Código ASCII de la "Ñ" mayúscula
+                        decryptedCharCode = 209 - shift;
+                        if (decryptedCharCode < 65) {
+                            decryptedCharCode += 26;
+                        }
+                    }
+                    // Manejar la letra "ñ" (minúscula)
+                    else if (charCode === 241) { // Código ASCII de la "ñ" minúscula
+                        decryptedCharCode = 241 - shift;
+                        if (decryptedCharCode < 97) {
+                            decryptedCharCode += 26;
+                        }
+                    } 
+                    // Mantener caracteres no alfabéticos
+                    else {
+                        decryptedCharCode = charCode;
+                    }
+
+                    decryptedTextForShift += String.fromCharCode(decryptedCharCode);
+                }
+                decryptedText += "Salto " + shift + ": " + decryptedTextForShift + "\n";
+            }
+
+            document.getElementById('decryptedOutput').value = decryptedText;
+        }
+    </script>
+</body>
+</html>
